@@ -1,14 +1,16 @@
 import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
 import Schedual, { SchedualSettings } from "./Schedual";
 import { EventEmitter } from "events";
-
+import { settings } from "cluster";
 export default class SchedualManager {
   private _currentTag: string = "";
   private _nextTag: string = "";
   private _scheduals: Array<Schedual> = [];
   private _currentSchedual: Schedual | null = null;
   private nextSchedual: EventEmitter;
+  private _settings: SchedualSettings[];
   constructor(scheduals: SchedualSettings[]) {
+    this._settings = scheduals;
     this.nextSchedual = new EventEmitter();
     this.nextSchedual.on("end", () => {
       this.goToNextSchedual();
@@ -36,6 +38,18 @@ export default class SchedualManager {
   public goToNextSchedual() {
     this.goToSchedual(this._nextTag);
   }
+  //i is the index of current schedual
+  private generateOutOfBounds(i: number): TimeSlotSettings {
+    if (this._nextTag) {
+    }
+    return {
+      begin: this._settings[i].timeSlots[this._settings[i].timeSlots.length - 1]
+        .end,
+      end: this._settings[this.getSchedualIndexBasedOnTag(this._nextTag)]
+        .timeSlots[0].begin,
+      name: this._settings[i].outOfBoundsName,
+    };
+  }
   //Go to schedual based on tag
   public goToSchedual(tag: string) {
     //Gets rid of chance of nextSchedual emitter from being activated
@@ -46,7 +60,10 @@ export default class SchedualManager {
     console.log(schedualIndex);
     this._currentSchedual = this._scheduals[schedualIndex];
     this._currentTag = tag;
-    this._currentSchedual.initiateCurrentTimeSlot();
+    this._nextTag = this._settings[schedualIndex].defaultNextSchedualTag;
+    this._currentSchedual.initiateCurrentTimeSlot(
+      this.generateOutOfBounds(schedualIndex)
+    );
   }
   public get currentTimeSlot(): TimeSlot | null {
     if (this._currentSchedual) {

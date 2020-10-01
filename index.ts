@@ -26,25 +26,13 @@ let monday: SchedualSettings = {
     { name: "Passing Period", begin: [1 + 12, 51], end: [1 + 12, 56] },
     { name: "8th Period", begin: [1 + 12, 56], end: [2 + 12, 26] },
   ],
-
+  outOfBoundsName: "Out of school",
   tags: ["monday"],
+  defaultNextSchedualTag: "monday",
 };
-let settings2: SchedualSettings = {
-  timeSlots: [{ name: "class 1", begin: [4 + 12, 48], end: [4 + 12, 49] }],
-  outOfBounds: {
-    name: "out of bounds",
-    begin: [4 + 12, 49],
-    end: [4 + 12, 59],
-  },
-  tags: ["tuesday"],
-};
-let s = new SchedualManager([settings, settings2]);
-s.setNextTag = "tuesday";
-s.goToSchedual("monday");
+let s = new SchedualManager([monday, monday]);
+s.setNextTag = "monday";
+s.goToNextSchedual();
 setInterval(() => {
-  console.log(
-    s.currentTimeSlot?.timeLeft(),
-    s.currentTimeSlot?.name,
-    s.currentTag
-  );
+  console.log(s.currentTimeSlot?.timeLeft());
 }, 1000);

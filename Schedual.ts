@@ -6,11 +6,13 @@ export default class Schedual {
   private settings = Array<TimeSlotSettings>();
   private currentSlot: TimeSlot | null = null;
   private nextSlot: EventEmitter;
-  private outOfBoundsSlot: TimeSlot;
-  private outOfBoundsSettings: TimeSlotSettings;
+  private outOfBoundsSlot: TimeSlot | null = null;
+  private outOfBoundsSettings: TimeSlotSettings | null = null;
   private _tags: string[];
+  private schedualEndEvent: EventEmitter;
   //Out of bounds is the timeslot after the schedual is over
   constructor(settings: SchedualSettings, schedualEndEvent: EventEmitter) {
+    this.schedualEndEvent = schedualEndEvent;
     this.settings = settings.timeSlots;
     this._tags = settings.tags;
     this.nextSlot = new EventEmitter();
@@ -21,8 +23,6 @@ export default class Schedual {
     this.settings.map((setting) => {
       this.timeSlots.push(new TimeSlot(setting, this.nextSlot));
     });
-    this.outOfBoundsSettings = settings.outOfBounds;
-    this.outOfBoundsSlot = new TimeSlot(settings.outOfBounds, schedualEndEvent);
   }
   //Finds the current Timeslot Index based on the time, if it is out of schedual bounds it returns -1
   private getCurrentTimeSlotIndex(): number {
@@ -45,7 +45,7 @@ export default class Schedual {
   private getShift(i: number): number {
     let slot: TimeSlotSettings;
     if (i == -1) {
-      slot = this.outOfBoundsSettings;
+      slot = this.outOfBoundsSettings as TimeSlotSettings;
     } else {
       slot = this.settings[i];
     }
@@ -58,7 +58,9 @@ export default class Schedual {
     );
     return shift.as("millisecond");
   }
-  public initiateCurrentTimeSlot() {
+  public initiateCurrentTimeSlot(outOfBounds: TimeSlotSettings) {
+    this.outOfBoundsSettings = outOfBounds;
+    this.outOfBoundsSlot = new TimeSlot(outOfBounds, this.schedualEndEvent);
     this.initiateNextTimeSlot();
     //Add other inital conditions if needed here
   }
@@ -66,7 +68,7 @@ export default class Schedual {
     let timeSlotIndex: number = this.getCurrentTimeSlotIndex();
     //Out of bound case
     if (timeSlotIndex == -1) {
-      this.currentSlot = this.outOfBoundsSlot;
+      this.currentSlot = this.outOfBoundsSlot as TimeSlot;
     } else {
       this.currentSlot = this.timeSlots[timeSlotIndex];
     }
@@ -89,5 +91,6 @@ export default class Schedual {
 export interface SchedualSettings {
   tags: string[];
   timeSlots: TimeSlotSettings[];
-  outOfBounds: TimeSlotSettings;
+  outOfBoundsName: string;
+  defaultNextSchedualTag: string;
 }
