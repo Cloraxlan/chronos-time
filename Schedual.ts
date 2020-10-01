@@ -84,6 +84,13 @@ export default class Schedual {
   public purify() {
     this.currentSlot = null;
   }
+  public set outOfBounds(outOfBoundsSettings: TimeSlotSettings) {
+    this.outOfBoundsSettings = outOfBoundsSettings;
+    this.outOfBoundsSlot = new TimeSlot(
+      outOfBoundsSettings,
+      this.schedualEndEvent
+    );
+  }
 }
 //Tags are the possible weekdays or special events that trigger that schedual to happen
 //Time slots are each class

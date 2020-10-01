@@ -9,6 +9,7 @@ export default class SchedualManager {
   private _currentSchedual: Schedual | null = null;
   private nextSchedual: EventEmitter;
   private _settings: SchedualSettings[];
+  private _currentSettingIndex: number = 0;
   constructor(scheduals: SchedualSettings[]) {
     this._settings = scheduals;
     this.nextSchedual = new EventEmitter();
@@ -33,6 +34,12 @@ export default class SchedualManager {
   }
   set setNextTag(tag: string) {
     this._nextTag = tag;
+    if (this._currentSchedual) {
+      this._currentSchedual.purify();
+      this._currentSchedual.initiateCurrentTimeSlot(
+        this.generateOutOfBounds(this._currentSettingIndex)
+      );
+    }
   }
   //Go to schedual based on _nextTag
   public goToNextSchedual() {
@@ -59,6 +66,7 @@ export default class SchedualManager {
     let schedualIndex = this.getSchedualIndexBasedOnTag(tag);
     console.log(schedualIndex);
     this._currentSchedual = this._scheduals[schedualIndex];
+    this._currentSettingIndex = schedualIndex;
     this._currentTag = tag;
     this._nextTag = this._settings[schedualIndex].defaultNextSchedualTag;
     this._currentSchedual.initiateCurrentTimeSlot(
