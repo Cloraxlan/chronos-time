@@ -87,13 +87,13 @@ let friday: SchedualSettings = {
   defaultNextSchedualTag: "saturday",
 };
 let saturday: SchedualSettings = {
-  timeSlots: [],
+  timeSlots: [{ name: "Weekend", begin: [0 + 0, 0], end: [12 + 12, 0] }],
   outOfBoundsName: "Out of school",
   tags: ["saturday"],
   defaultNextSchedualTag: "sunday",
 };
 let sunday: SchedualSettings = {
-  timeSlots: [],
+  timeSlots: [{ name: "Weekend", begin: [0 + 0, 0], end: [12 + 12, 0] }],
   outOfBoundsName: "Out of school",
   tags: ["sunday"],
   defaultNextSchedualTag: "monday",
@@ -107,7 +107,7 @@ let s = new SchedualManager([
   saturday,
   sunday,
 ]);
-s.setNextTag = "friday";
+s.setNextTag = "sunday";
 s.goToNextSchedual();
 setInterval(() => {
   console.log(
