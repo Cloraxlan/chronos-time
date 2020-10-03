@@ -2,6 +2,7 @@ import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
 import Schedual, { SchedualSettings } from "./Schedual";
 import { EventEmitter } from "events";
 import { settings } from "cluster";
+import EmptySchedual from "./EmptySchedual";
 export default class SchedualManager {
   private _currentTag: string = "";
   private _nextTag: string = "";
@@ -16,8 +17,18 @@ export default class SchedualManager {
     this.nextSchedual.on("end", () => {
       this.goToNextSchedual();
     });
-    scheduals.map((schedual) => {
-      this._scheduals.push(new Schedual(schedual, this.nextSchedual));
+    scheduals.map((schedual, i) => {
+      if (schedual.timeSlots.length == 0) {
+        let empty = new EmptySchedual(
+          schedual.tags,
+          schedual.defaultNextSchedualTag,
+          this.nextSchedual
+        );
+        this._scheduals.push(empty);
+        scheduals[i] = empty.sSettings;
+      } else {
+        this._scheduals.push(new Schedual(schedual, this.nextSchedual));
+      }
     });
   }
   //Finds index of Schedual based on given tag or returns -1 if not found
@@ -64,7 +75,6 @@ export default class SchedualManager {
       this._currentSchedual.purify();
     }
     let schedualIndex = this.getSchedualIndexBasedOnTag(tag);
-    console.log(schedualIndex);
     this._currentSchedual = this._scheduals[schedualIndex];
     this._currentSettingIndex = schedualIndex;
     this._currentTag = tag;
@@ -73,7 +83,7 @@ export default class SchedualManager {
       this.generateOutOfBounds(schedualIndex)
     );
   }
-  public get currentTimeSlot(): TimeSlot | null {
+  private get currentTimeSlot(): TimeSlot | null {
     if (this._currentSchedual) {
       let currentTimeSlot: TimeSlot | null = this._currentSchedual
         .currentTimeSlot;
@@ -88,5 +98,14 @@ export default class SchedualManager {
   }
   public get currentTag(): string {
     return this._currentTag;
+  }
+  public get currentName(): string | undefined {
+    return this._currentSchedual?.currentName;
+  }
+  public get currentTimeLeft(): string | [number, number, number] | undefined {
+    return this._currentSchedual?.currentTimeLeft;
+  }
+  public get nextTag(): string {
+    return this._nextTag;
   }
 }

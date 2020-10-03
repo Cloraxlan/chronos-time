@@ -10,8 +10,10 @@ export default class Schedual {
   private outOfBoundsSettings: TimeSlotSettings | null = null;
   private _tags: string[];
   private schedualEndEvent: EventEmitter;
+  private _sSettings: SchedualSettings;
   //Out of bounds is the timeslot after the schedual is over
   constructor(settings: SchedualSettings, schedualEndEvent: EventEmitter) {
+    this._sSettings = settings;
     this.schedualEndEvent = schedualEndEvent;
     this.settings = settings.timeSlots;
     this._tags = settings.tags;
@@ -74,11 +76,20 @@ export default class Schedual {
     }
     this.currentSlot.startTimeSlot(this.getShift(timeSlotIndex));
   }
+  public get currentTimeLeft(): [number, number, number] | undefined | string {
+    return this.currentSlot?.timeLeft();
+  }
+  public get currentName(): string | undefined {
+    return this.currentSlot?.name;
+  }
   public get currentTimeSlot(): TimeSlot | null {
     return this.currentSlot;
   }
   public get tags(): String[] {
     return this._tags;
+  }
+  public get sSettings(): SchedualSettings {
+    return this._sSettings;
   }
   //Cleans up when next schedual starts
   public purify() {
