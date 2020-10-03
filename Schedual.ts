@@ -91,6 +91,15 @@ export default class Schedual {
   public get sSettings(): SchedualSettings {
     return this._sSettings;
   }
+  public get nextName(): string {
+    let nextTimeSlot: TimeSlotSettings | undefined = this.settings[
+      this.getCurrentTimeSlotIndex() + 1
+    ];
+    if (nextTimeSlot) {
+      return nextTimeSlot.name;
+    }
+    return "N/A";
+  }
   //Cleans up when next schedual starts
   public purify() {
     this.currentSlot = null;

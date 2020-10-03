@@ -102,6 +102,9 @@ export default class SchedualManager {
   public get currentName(): string | undefined {
     return this._currentSchedual?.currentName;
   }
+  public get nextName(): string | undefined {
+    return this._currentSchedual?.nextName;
+  }
   public get currentTimeLeft(): string | [number, number, number] | undefined {
     return this._currentSchedual?.currentTimeLeft;
   }

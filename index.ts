@@ -110,5 +110,5 @@ let s = new SchedualManager([
 s.setNextTag = "friday";
 s.goToNextSchedual();
 setInterval(() => {
-  console.log(s.currentTimeLeft, s.currentName, s.currentTag);
+  console.log(s.currentTimeLeft, s.currentName, s.nextName, s.currentTag);
 }, 1000);
