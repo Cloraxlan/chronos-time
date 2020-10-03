@@ -1,8 +1,9 @@
-import TimeSlot from "./TimeSlot";
+import TimeSlot, { SLOT_TYPES, TimeSlotSettings } from "./TimeSlot";
 import Schedual, { SchedualSettings } from "./Schedual";
 import { DateTime } from "luxon";
 import { EventEmitter } from "events";
 import SchedualManager from "./SchedualManager";
+import PassingTimeSlot from "./PassingTimeSlot";
 let nextS = new EventEmitter();
 let monday: SchedualSettings = {
   timeSlots: [
@@ -75,17 +76,28 @@ let thursday: SchedualSettings = {
 let friday: SchedualSettings = {
   timeSlots: [
     { name: "5th Period", begin: [7 + 0, 30], end: [9 + 0, 0] },
-    { name: "Passing Period", begin: [9 + 0, 0], end: [9 + 0, 10] },
+    {
+      name: "Passing Period",
+      begin: [9 + 0, 0],
+      end: [9 + 0, 10],
+      type: "passing",
+    },
     { name: "6th Period", begin: [9 + 0, 10], end: [10 + 0, 40] },
     { name: "Lunch", begin: [10 + 0, 40], end: [11 + 0, 15] },
     { name: "7th Period", begin: [11 + 0, 15], end: [12 + 0, 45] },
-    { name: "Passing Period", begin: [12 + 0, 45], end: [12 + 0, 55] },
+    {
+      name: "Passing Period",
+      begin: [12 + 0, 45],
+      end: [12 + 0, 55],
+      type: "passing",
+    },
     { name: "8th Period", begin: [12 + 0, 55], end: [2 + 12, 25] },
   ],
   outOfBoundsName: "Out of school",
   tags: ["friday"],
   defaultNextSchedualTag: "saturday",
 };
+
 let saturday: SchedualSettings = {
   timeSlots: [],
   outOfBoundsName: "Out of school",
@@ -98,6 +110,30 @@ let sunday: SchedualSettings = {
   tags: ["sunday"],
   defaultNextSchedualTag: "monday",
 };
+let norm: TimeSlotSettings = {
+  name: "norm",
+  begin: [4 + 12, 39],
+  end: [4 + 12, 40],
+  type: "normal",
+};
+let pass: TimeSlotSettings = {
+  name: "Passing Period",
+  begin: [4 + 12, 40],
+  end: [4 + 12, 41],
+  type: "passing",
+};
+let norm2: TimeSlotSettings = {
+  name: "norm2",
+  begin: [4 + 12, 41],
+  end: [4 + 12, 42],
+  type: "normal",
+};
+let test: SchedualSettings = {
+  timeSlots: [norm, pass, norm2],
+  outOfBoundsName: "Out of school",
+  tags: ["test"],
+  defaultNextSchedualTag: "test",
+};
 let s = new SchedualManager([
   monday,
   tuesday,
@@ -106,8 +142,9 @@ let s = new SchedualManager([
   friday,
   saturday,
   sunday,
+  test,
 ]);
-s.setNextTag = "friday";
+s.setNextTag = "test";
 s.goToNextSchedual();
 setInterval(() => {
   console.log(s.currentTimeLeft, s.currentName, s.nextName, s.currentTag);

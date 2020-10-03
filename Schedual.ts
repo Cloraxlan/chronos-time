@@ -1,6 +1,7 @@
-import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
+import TimeSlot, { TimeSlotSettings, SLOT_TYPES } from "./TimeSlot";
 import { DateTime, Duration } from "luxon";
 import { EventEmitter } from "events";
+import PassingTimeSlot from "./PassingTimeSlot";
 export default class Schedual {
   private timeSlots = Array<TimeSlot>();
   private settings = Array<TimeSlotSettings>();
@@ -22,8 +23,18 @@ export default class Schedual {
     this.nextSlot.on("end", () => {
       this.initiateNextTimeSlot();
     });
-    this.settings.map((setting) => {
-      this.timeSlots.push(new TimeSlot(setting, this.nextSlot));
+    this.settings.map((setting, i) => {
+      switch (setting.type) {
+        case SLOT_TYPES.PASSING:
+          this.timeSlots.push(
+            new PassingTimeSlot(setting, this.settings[i + 1], this.nextSlot)
+          );
+          break;
+
+        default:
+          this.timeSlots.push(new TimeSlot(setting, this.nextSlot));
+          break;
+      }
     });
   }
   //Finds the current Timeslot Index based on the time, if it is out of schedual bounds it returns -1
@@ -96,7 +107,7 @@ export default class Schedual {
     if (this.getCurrentTimeSlotIndex() == -1) {
       return "N/A";
     }
-    let nextTimeSlot: TimeSlotSettings | undefined = this.settings[
+    let nextTimeSlot: TimeSlot | undefined = this.timeSlots[
       this.getCurrentTimeSlotIndex() + 1
     ];
     if (nextTimeSlot) {

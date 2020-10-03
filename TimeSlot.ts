@@ -32,9 +32,13 @@ export default class TimeSlot {
   public startTimeSlot(shift: number = 0) {
     let trueLength: number = this._length - shift;
     this._duration = Interval.after(new Date(), trueLength);
+    this.activateTimer(trueLength);
+  }
+  //Ends the period
+  public activateTimer(length: number) {
     setTimeout(() => {
       this._after.emit("end");
-    }, trueLength);
+    }, length);
   }
   //Returns the time the TimeSlot ends
   //If it was not started or already ended returns null
@@ -71,6 +75,12 @@ export default class TimeSlot {
   get name(): string {
     return this._name;
   }
+  set name(name: string) {
+    this._name = name;
+  }
+  get after(): EventEmitter {
+    return this._after;
+  }
 }
 //Used to construct TimeSlot
 //Begin and end use military time
@@ -78,4 +88,9 @@ export interface TimeSlotSettings {
   name: string;
   begin: [number, number];
   end: [number, number];
+  type?: "normal" | "passing";
 }
+export const SLOT_TYPES = {
+  NORMAL: "normal",
+  PASSING: "passing",
+};
