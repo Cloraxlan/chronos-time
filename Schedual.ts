@@ -92,6 +92,10 @@ export default class Schedual {
     return this._sSettings;
   }
   public get nextName(): string {
+    //Out of bounds case
+    if (this.getCurrentTimeSlotIndex() == -1) {
+      return "N/A";
+    }
     let nextTimeSlot: TimeSlotSettings | undefined = this.settings[
       this.getCurrentTimeSlotIndex() + 1
     ];
