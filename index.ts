@@ -140,8 +140,8 @@ let thursday: SchedualSettings = {
     { name: "4th Period", begin: [12 + 0, 55], end: [2 + 12, 25] },
   ],
   outOfBoundsName: "Out of school",
-  tags: ["tuesday"],
-  defaultNextSchedualTag: "wendsday",
+  tags: ["thursday"],
+  defaultNextSchedualTag: "friday",
 };
 let friday: SchedualSettings = {
   timeSlots: [
@@ -164,8 +164,8 @@ let friday: SchedualSettings = {
     { name: "8th Period", begin: [12 + 0, 55], end: [2 + 12, 25] },
   ],
   outOfBoundsName: "Out of school",
-  tags: ["wendsday"],
-  defaultNextSchedualTag: "thursday",
+  tags: ["friday"],
+  defaultNextSchedualTag: "saturday",
 };
 
 let saturday: SchedualSettings = {
