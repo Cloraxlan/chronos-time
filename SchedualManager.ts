@@ -11,11 +11,12 @@ export default class SchedualManager {
   private nextSchedual: EventEmitter;
   private _settings: SchedualSettings[];
   private _currentSettingIndex: number = 0;
-  constructor(scheduals: SchedualSettings[]) {
+  constructor(scheduals: SchedualSettings[], onSchedualEnd: () => void) {
     this._settings = scheduals;
     this.nextSchedual = new EventEmitter();
     this.nextSchedual.on("end", () => {
       this.goToNextSchedual();
+      onSchedualEnd();
     });
     scheduals.map((schedual, i) => {
       if (schedual.timeSlots.length == 0) {

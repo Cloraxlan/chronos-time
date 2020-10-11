@@ -3,6 +3,8 @@ import Schedual, { SchedualSettings } from "./Schedual";
 import { DateTime } from "luxon";
 import { EventEmitter } from "events";
 import SchedualManager from "./SchedualManager";
+import fetch from "node-fetch";
+
 import PassingTimeSlot from "./PassingTimeSlot";
 let nextS = new EventEmitter();
 let monday: SchedualSettings = {
@@ -181,18 +183,24 @@ let sunday: SchedualSettings = {
   defaultNextSchedualTag: "monday",
 };
 
-let s = new SchedualManager([
-  monday,
-  tuesday,
-  wendsday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
-]);
-s.setNextTag = "monday";
+let s = new SchedualManager(
+  [monday, tuesday, wendsday, thursday, friday, saturday, sunday],
+  () => {
+    fetch("https://chronoshhs.herokuapp.com/HHSTodayIs").then((res) => {
+      res.json().then((json) => {
+        s.goToSchedual(json.today);
+        s.setNextTag = json.tommorow;
+      });
+    });
+  }
+);
+fetch("https://chronoshhs.herokuapp.com/HHSTodayIs").then((res) => {
+  res.json().then((json) => {
+    s.goToSchedual(json.today);
+    s.setNextTag = json.tommorow;
+  });
+});
 
-s.goToNextSchedual();
 setInterval(() => {
   console.log(s.currentTimeLeft, s.currentName, s.nextName, s.currentTag);
 }, 1000);
