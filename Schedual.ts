@@ -102,10 +102,10 @@ export default class Schedual {
   public get sSettings(): SchedualSettings {
     return this._sSettings;
   }
-  public get nextName(): string {
+  public nextName(nextOutOfBounds: string): string {
     //Out of bounds case
     if (this.getCurrentTimeSlotIndex() == -1) {
-      return "N/A";
+      return nextOutOfBounds;
     }
     let nextTimeSlot: TimeSlot | undefined = this.timeSlots[
       this.getCurrentTimeSlotIndex() + 1

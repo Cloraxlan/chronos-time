@@ -104,7 +104,10 @@ export default class SchedualManager {
     return this._currentSchedual?.currentName;
   }
   public get nextName(): string | undefined {
-    return this._currentSchedual?.nextName;
+    let nextOutOfBounds: string = this._settings[
+      this.getSchedualIndexBasedOnTag(this._nextTag)
+    ].timeSlots[0].name;
+    return this._currentSchedual?.nextName(nextOutOfBounds);
   }
   public get currentTimeLeft(): string | [number, number, number] | undefined {
     return this._currentSchedual?.currentTimeLeft;
