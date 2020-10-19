@@ -6,6 +6,7 @@ import SchedualManager from "./SchedualManager";
 import fetch from "node-fetch";
 
 import PassingTimeSlot from "./PassingTimeSlot";
+import ExternalSchedualLoader from "./ExternalSchedualLoader";
 let nextS = new EventEmitter();
 let monday: SchedualSettings = {
   timeSlots: [
@@ -183,23 +184,10 @@ let sunday: SchedualSettings = {
   defaultNextSchedualTag: "monday",
 };
 
-let s = new SchedualManager(
-  [monday, tuesday, wendsday, thursday, friday, saturday, sunday],
-  () => {
-    fetch("https://chronoshhs.herokuapp.com/HHSTodayIs").then((res) => {
-      res.json().then((json) => {
-        s.goToSchedual(json.today);
-        s.setNextTag = json.tommorow;
-      });
-    });
-  }
+let s: ExternalSchedualLoader = new ExternalSchedualLoader(
+  "https://chronoshhs.herokuapp.com/hhs",
+  "https://chronoshhs.herokuapp.com/HHSTodayIs"
 );
-fetch("https://chronoshhs.herokuapp.com/HHSTodayIs").then((res) => {
-  res.json().then((json) => {
-    s.goToSchedual(json.today);
-    s.setNextTag = json.tommorow;
-  });
-});
 
 setInterval(() => {
   console.log(s.currentTimeLeft, s.currentName, s.nextName, s.currentTag);
