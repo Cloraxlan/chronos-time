@@ -1,0 +1,8 @@
+/// <reference types="node" />
+import Schedual from "./Schedual";
+import { EventEmitter } from "events";
+export default class EmptySchedual extends Schedual {
+    constructor(tags: string[], defaultNextSchedualTag: string, schedualEndEvent: EventEmitter);
+    get currentName(): string | undefined;
+    get currentTimeLeft(): [number, number, number] | undefined | string;
+}

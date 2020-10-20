@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var events_1 = require("events");
-var ExternalSchedualLoader_1 = __importDefault(require("./ExternalSchedualLoader"));
-var nextS = new events_1.EventEmitter();
-var monday = {
+const events_1 = require("events");
+const ExternalSchedualLoader_1 = __importDefault(require("./ExternalSchedualLoader"));
+let nextS = new events_1.EventEmitter();
+let monday = {
     timeSlots: [
         { name: "Teacher PLC Meetings", begin: [7 + 0, 10], end: [8 + 0, 10] },
         {
@@ -72,7 +72,7 @@ var monday = {
     tags: ["monday"],
     defaultNextSchedualTag: "tuesday",
 };
-var tuesday = {
+let tuesday = {
     timeSlots: [
         { name: "1st Period", begin: [7 + 0, 30], end: [9 + 0, 0] },
         {
@@ -96,7 +96,7 @@ var tuesday = {
     tags: ["tuesday"],
     defaultNextSchedualTag: "wendsday",
 };
-var wendsday = {
+let wendsday = {
     timeSlots: [
         { name: "5th Period", begin: [7 + 0, 30], end: [9 + 0, 0] },
         {
@@ -120,7 +120,7 @@ var wendsday = {
     tags: ["wendsday"],
     defaultNextSchedualTag: "thursday",
 };
-var thursday = {
+let thursday = {
     timeSlots: [
         { name: "1st Period", begin: [7 + 0, 30], end: [9 + 0, 0] },
         {
@@ -144,7 +144,7 @@ var thursday = {
     tags: ["thursday"],
     defaultNextSchedualTag: "friday",
 };
-var friday = {
+let friday = {
     timeSlots: [
         { name: "5th Period", begin: [7 + 0, 30], end: [9 + 0, 0] },
         {
@@ -168,19 +168,19 @@ var friday = {
     tags: ["friday"],
     defaultNextSchedualTag: "saturday",
 };
-var saturday = {
+let saturday = {
     timeSlots: [],
     outOfBoundsName: "",
     tags: ["saturday"],
     defaultNextSchedualTag: "sunday",
 };
-var sunday = {
+let sunday = {
     timeSlots: [],
     outOfBoundsName: "",
     tags: ["sunday"],
     defaultNextSchedualTag: "monday",
 };
-var s = new ExternalSchedualLoader_1.default("https://chronoshhs.herokuapp.com/hhs", "https://chronoshhs.herokuapp.com/HHSTodayIs");
-setInterval(function () {
+let s = new ExternalSchedualLoader_1.default("https://chronoshhs.herokuapp.com/hhs", "https://chronoshhs.herokuapp.com/HHSTodayIs");
+setInterval(() => {
     console.log(s.currentTimeLeft, s.currentName, s.nextName, s.currentTag);
 }, 1000);
