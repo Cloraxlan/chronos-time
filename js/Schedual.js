@@ -1,8 +1,11 @@
-import { SLOT_TYPES, TimeSlot } from "./TimeSlot";
-import { DateTime } from "luxon";
-import { EventEmitter } from "events";
-import { PassingTimeSlot } from "./PassingTimeSlot";
-export class Schedual {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Schedual = void 0;
+const TimeSlot_1 = require("./TimeSlot");
+const luxon_1 = require("luxon");
+const events_1 = require("events");
+const PassingTimeSlot_1 = require("./PassingTimeSlot");
+class Schedual {
     //Out of bounds is the timeslot after the schedual is over
     constructor(settings, schedualEndEvent) {
         this.timeSlots = Array();
@@ -14,18 +17,18 @@ export class Schedual {
         this.schedualEndEvent = schedualEndEvent;
         this.settings = settings.timeSlots;
         this._tags = settings.tags;
-        this.nextSlot = new EventEmitter();
+        this.nextSlot = new events_1.EventEmitter();
         //Ran when Timeslot ends
         this.nextSlot.on("end", () => {
             this.initiateNextTimeSlot();
         });
         this.settings.map((setting, i) => {
             switch (setting.type) {
-                case SLOT_TYPES.PASSING:
-                    this.timeSlots.push(new PassingTimeSlot(setting, this.settings[i + 1], this.nextSlot));
+                case TimeSlot_1.SLOT_TYPES.PASSING:
+                    this.timeSlots.push(new PassingTimeSlot_1.PassingTimeSlot(setting, this.settings[i + 1], this.nextSlot));
                     break;
                 default:
-                    this.timeSlots.push(new TimeSlot(setting, this.nextSlot));
+                    this.timeSlots.push(new TimeSlot_1.TimeSlot(setting, this.nextSlot));
                     break;
             }
         });
@@ -34,12 +37,12 @@ export class Schedual {
     getCurrentTimeSlotIndex() {
         let r = -1;
         this.settings.map((setting, i) => {
-            if ((setting.begin[0] < DateTime.local().hour ||
-                (setting.begin[1] <= DateTime.local().minute &&
-                    setting.begin[0] == DateTime.local().hour)) &&
-                (setting.end[0] > DateTime.local().hour ||
-                    (setting.end[1] > DateTime.local().minute &&
-                        setting.end[0] == DateTime.local().hour))) {
+            if ((setting.begin[0] < luxon_1.DateTime.local().hour ||
+                (setting.begin[1] <= luxon_1.DateTime.local().minute &&
+                    setting.begin[0] == luxon_1.DateTime.local().hour)) &&
+                (setting.end[0] > luxon_1.DateTime.local().hour ||
+                    (setting.end[1] > luxon_1.DateTime.local().minute &&
+                        setting.end[0] == luxon_1.DateTime.local().hour))) {
                 r = i;
             }
         });
@@ -54,7 +57,7 @@ export class Schedual {
         else {
             slot = this.settings[i];
         }
-        let shift = DateTime.local().diff(DateTime.fromObject({
+        let shift = luxon_1.DateTime.local().diff(luxon_1.DateTime.fromObject({
             hour: slot.begin[0],
             minute: slot.begin[1],
             second: 0,
@@ -63,7 +66,7 @@ export class Schedual {
     }
     initiateCurrentTimeSlot(outOfBounds) {
         this.outOfBoundsSettings = outOfBounds;
-        this.outOfBoundsSlot = new TimeSlot(outOfBounds, this.schedualEndEvent);
+        this.outOfBoundsSlot = new TimeSlot_1.TimeSlot(outOfBounds, this.schedualEndEvent);
         this.initiateNextTimeSlot();
         //Add other inital conditions if needed here
     }
@@ -112,6 +115,7 @@ export class Schedual {
     }
     set outOfBounds(outOfBoundsSettings) {
         this.outOfBoundsSettings = outOfBoundsSettings;
-        this.outOfBoundsSlot = new TimeSlot(outOfBoundsSettings, this.schedualEndEvent);
+        this.outOfBoundsSlot = new TimeSlot_1.TimeSlot(outOfBoundsSettings, this.schedualEndEvent);
     }
 }
+exports.Schedual = Schedual;

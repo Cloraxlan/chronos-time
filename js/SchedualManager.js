@@ -1,7 +1,10 @@
-import { Schedual } from "./Schedual";
-import { EventEmitter } from "events";
-import { EmptySchedual } from "./EmptySchedual";
-export class SchedualManager {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchedualManager = void 0;
+const Schedual_1 = require("./Schedual");
+const events_1 = require("events");
+const EmptySchedual_1 = require("./EmptySchedual");
+class SchedualManager {
     constructor(scheduals, onSchedualEnd) {
         this._currentTag = "";
         this._nextTag = "";
@@ -9,19 +12,19 @@ export class SchedualManager {
         this._currentSchedual = null;
         this._currentSettingIndex = 0;
         this._settings = scheduals;
-        this.nextSchedual = new EventEmitter();
+        this.nextSchedual = new events_1.EventEmitter();
         this.nextSchedual.on("end", () => {
             this.goToNextSchedual();
             onSchedualEnd();
         });
         scheduals.map((schedual, i) => {
             if (schedual.timeSlots.length == 0) {
-                let empty = new EmptySchedual(schedual.tags, schedual.defaultNextSchedualTag, this.nextSchedual);
+                let empty = new EmptySchedual_1.EmptySchedual(schedual.tags, schedual.defaultNextSchedualTag, this.nextSchedual);
                 this._scheduals.push(empty);
                 scheduals[i] = empty.sSettings;
             }
             else {
-                this._scheduals.push(new Schedual(schedual, this.nextSchedual));
+                this._scheduals.push(new Schedual_1.Schedual(schedual, this.nextSchedual));
             }
         });
     }
@@ -106,3 +109,4 @@ export class SchedualManager {
         return this._nextTag;
     }
 }
+exports.SchedualManager = SchedualManager;

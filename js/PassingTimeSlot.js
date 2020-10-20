@@ -1,5 +1,8 @@
-import { TimeSlot } from "./TimeSlot";
-export class PassingTimeSlot extends TimeSlot {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PassingTimeSlot = void 0;
+const TimeSlot_1 = require("./TimeSlot");
+class PassingTimeSlot extends TimeSlot_1.TimeSlot {
     constructor(timeSlot, timeSlotAfter, after) {
         super(timeSlot, after);
         this._timeSlot = timeSlot;
@@ -24,3 +27,4 @@ export class PassingTimeSlot extends TimeSlot {
         }, length);
     }
 }
+exports.PassingTimeSlot = PassingTimeSlot;
