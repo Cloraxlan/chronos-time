@@ -9,7 +9,6 @@ export class ExternalSchedualLoader {
     this._pingSchedualURL = pingSchedualURL;
     fetch(this._getSchedualURL).then((res) => {
       res.json().then((data) => {
-        console.log(data);
         this._manager = new SchedualManager(data.scheduals, () => {
           this.getTodayTommorow().then((todayTommorow: [string, string]) => {
             if (this._manager) {
