@@ -2,6 +2,9 @@ import { TimeSlotSettings, SLOT_TYPES, TimeSlot } from "./TimeSlot";
 import { DateTime, Duration } from "luxon";
 import { EventEmitter } from "events";
 import { PassingTimeSlot } from "./PassingTimeSlot";
+let now: () => DateTime = () => {
+  return DateTime.local();
+};
 export class Schedual {
   private timeSlots = Array<TimeSlot>();
   private settings = Array<TimeSlotSettings>();
@@ -42,16 +45,16 @@ export class Schedual {
     let r = -1;
     this.settings.map((setting, i) => {
       if (
-        (setting.begin[0] < DateTime.local().hour ||
-          (setting.begin[1] <= DateTime.local().minute &&
-            setting.begin[0] == DateTime.local().hour)) &&
-        (setting.end[0] > DateTime.local().hour ||
-          (setting.end[1] > DateTime.local().minute &&
-            setting.end[0] == DateTime.local().hour))
+        (setting.begin[0] < now().hour ||
+          (setting.begin[1] <= now().minute &&
+            setting.begin[0] == now().hour)) &&
+        (setting.end[0] > now().hour ||
+          (setting.end[1] > now().minute && setting.end[0] == now().hour))
       ) {
         r = i;
       }
     });
+
     return r;
   }
   //Returns time since the beginning of the i index
