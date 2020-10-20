@@ -1,51 +1,28 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmptySchedual = void 0;
-var Schedual_1 = require("./Schedual");
-var emptySettings = {
+const Schedual_1 = require("./Schedual");
+const emptySettings = {
     timeSlots: [{ name: "", begin: [0 + 0, 0], end: [12 + 12, 0] }],
     outOfBoundsName: "",
     tags: [],
     defaultNextSchedualTag: "",
 };
-var generateEmptySetting = function (tags, defaultNextSchedualTag) {
-    var newEmpty = emptySettings;
+let generateEmptySetting = (tags, defaultNextSchedualTag) => {
+    let newEmpty = emptySettings;
     newEmpty.defaultNextSchedualTag = defaultNextSchedualTag;
     newEmpty.tags = tags;
     return newEmpty;
 };
-var EmptySchedual = /** @class */ (function (_super) {
-    __extends(EmptySchedual, _super);
-    function EmptySchedual(tags, defaultNextSchedualTag, schedualEndEvent) {
-        return _super.call(this, generateEmptySetting(tags, defaultNextSchedualTag), schedualEndEvent) || this;
+class EmptySchedual extends Schedual_1.Schedual {
+    constructor(tags, defaultNextSchedualTag, schedualEndEvent) {
+        super(generateEmptySetting(tags, defaultNextSchedualTag), schedualEndEvent);
     }
-    Object.defineProperty(EmptySchedual.prototype, "currentName", {
-        get: function () {
-            return "N/A";
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EmptySchedual.prototype, "currentTimeLeft", {
-        get: function () {
-            return "No schedule for today";
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return EmptySchedual;
-}(Schedual_1.Schedual));
+    get currentName() {
+        return "N/A";
+    }
+    get currentTimeLeft() {
+        return "No schedule for today";
+    }
+}
 exports.EmptySchedual = EmptySchedual;
