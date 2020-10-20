@@ -1,6 +1,6 @@
-import Schedual, { SchedualSettings } from "./Schedual";
+import { SchedualSettings, Schedual } from "./Schedual";
 import { EventEmitter } from "events";
-import TimeSlot from "./TimeSlot";
+import { TimeSlot } from "./TimeSlot";
 const emptySettings: SchedualSettings = {
   timeSlots: [{ name: "", begin: [0 + 0, 0], end: [12 + 12, 0] }],
   outOfBoundsName: "",
@@ -16,7 +16,7 @@ let generateEmptySetting = (
   newEmpty.tags = tags;
   return newEmpty;
 };
-export default class EmptySchedual extends Schedual {
+export class EmptySchedual extends Schedual {
   constructor(
     tags: string[],
     defaultNextSchedualTag: string,

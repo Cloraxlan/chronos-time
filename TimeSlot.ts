@@ -5,7 +5,7 @@ const second = 1000;
 const minute = second * 60;
 const hour = minute * 60;
 
-export default class TimeSlot {
+export class TimeSlot {
   private _length: number;
   private _duration: Interval | null = null;
   private _name: string;

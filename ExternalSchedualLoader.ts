@@ -1,6 +1,6 @@
-import SchedualManager from "./SchedualManager";
+import { SchedualManager } from "./SchedualManager";
 import fetch from "node-fetch";
-export default class ExternalSchedualLoader {
+export class ExternalSchedualLoader {
   private _getSchedualURL: string;
   private _pingSchedualURL: string;
   private _manager: SchedualManager | null = null;

@@ -1,9 +1,9 @@
-import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
-import Schedual, { SchedualSettings } from "./Schedual";
+import { TimeSlotSettings, TimeSlot } from "./TimeSlot";
+import { SchedualSettings, Schedual } from "./Schedual";
 import { EventEmitter } from "events";
 import { settings } from "cluster";
-import EmptySchedual from "./EmptySchedual";
-export default class SchedualManager {
+import { EmptySchedual } from "./EmptySchedual";
+export class SchedualManager {
   private _currentTag: string = "";
   private _nextTag: string = "";
   private _scheduals: Array<Schedual> = [];

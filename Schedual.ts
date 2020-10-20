@@ -1,8 +1,8 @@
-import TimeSlot, { TimeSlotSettings, SLOT_TYPES } from "./TimeSlot";
+import { TimeSlotSettings, SLOT_TYPES, TimeSlot } from "./TimeSlot";
 import { DateTime, Duration } from "luxon";
 import { EventEmitter } from "events";
-import PassingTimeSlot from "./PassingTimeSlot";
-export default class Schedual {
+import { PassingTimeSlot } from "./PassingTimeSlot";
+export class Schedual {
   private timeSlots = Array<TimeSlot>();
   private settings = Array<TimeSlotSettings>();
   private currentSlot: TimeSlot | null = null;

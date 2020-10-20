@@ -1,6 +1,6 @@
-import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
+import { TimeSlotSettings, TimeSlot } from "./TimeSlot";
 import { EventEmitter } from "events";
-export default class PassingTimeSlot extends TimeSlot {
+export class PassingTimeSlot extends TimeSlot {
   private _timeSlot: TimeSlotSettings;
   private _timeSlotAfter: TimeSlotSettings;
   private _active: boolean;
