@@ -13,6 +13,7 @@ export class Schedual {
   private outOfBoundsSlot: TimeSlot | null = null;
   private outOfBoundsSettings: TimeSlotSettings | null = null;
   private _tags: string[];
+  private beforeOutOfBoundsSettings: TimeSlotSettings | null = null;
   private schedualEndEvent: EventEmitter;
   private _sSettings: SchedualSettings;
   //Out of bounds is the timeslot after the schedual is over
@@ -54,7 +55,15 @@ export class Schedual {
         r = i;
       }
     });
-
+    if (r == -1) {
+      if (
+        this.settings[0].begin[0] > now().hour ||
+        (this.settings[0].begin[1] > now().minute &&
+          this.settings[0].begin[0] == now().hour)
+      ) {
+        r = -2;
+      }
+    }
     return r;
   }
   //Returns time since the beginning of the i index
@@ -62,6 +71,8 @@ export class Schedual {
     let slot: TimeSlotSettings;
     if (i == -1) {
       slot = this.outOfBoundsSettings as TimeSlotSettings;
+    } else if (i == -2) {
+      slot = this.beforeOutOfBoundsSettings;
     } else {
       slot = this.settings[i];
     }
@@ -85,6 +96,16 @@ export class Schedual {
     //Out of bound case
     if (timeSlotIndex == -1) {
       this.currentSlot = this.outOfBoundsSlot as TimeSlot;
+    } else if (timeSlotIndex == -2) {
+      this.beforeOutOfBoundsSettings = {
+        begin: [0, 0],
+        end: this.settings[0].begin,
+        name: "N/A",
+      };
+      this.currentSlot = new TimeSlot(
+        this.beforeOutOfBoundsSettings,
+        this.schedualEndEvent
+      );
     } else {
       this.currentSlot = this.timeSlots[timeSlotIndex];
     }
@@ -109,6 +130,9 @@ export class Schedual {
     //Out of bounds case
     if (this.getCurrentTimeSlotIndex() == -1) {
       return nextOutOfBounds;
+    }
+    if (this.getCurrentTimeSlotIndex() == -2) {
+      return this.timeSlots[0].name;
     }
     let nextTimeSlot: TimeSlot | undefined = this.timeSlots[
       this.getCurrentTimeSlotIndex() + 1
