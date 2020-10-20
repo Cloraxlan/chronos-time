@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const TimeSlot_1 = __importDefault(require("./TimeSlot"));
-class PassingTimeSlot extends TimeSlot_1.default {
+import { TimeSlot } from "./TimeSlot";
+export class PassingTimeSlot extends TimeSlot {
     constructor(timeSlot, timeSlotAfter, after) {
         super(timeSlot, after);
         this._timeSlot = timeSlot;
@@ -29,4 +24,3 @@ class PassingTimeSlot extends TimeSlot_1.default {
         }, length);
     }
 }
-exports.default = PassingTimeSlot;

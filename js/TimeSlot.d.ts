@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { DateTime } from "luxon";
 import { EventEmitter } from "events";
-export default class TimeSlot {
+export declare class TimeSlot {
     private _length;
     private _duration;
     private _name;

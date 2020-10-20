@@ -1,9 +1,4 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const Schedual_1 = __importDefault(require("./Schedual"));
+import { Schedual } from "./Schedual";
 const emptySettings = {
     timeSlots: [{ name: "", begin: [0 + 0, 0], end: [12 + 12, 0] }],
     outOfBoundsName: "",
@@ -16,7 +11,7 @@ let generateEmptySetting = (tags, defaultNextSchedualTag) => {
     newEmpty.tags = tags;
     return newEmpty;
 };
-class EmptySchedual extends Schedual_1.default {
+export class EmptySchedual extends Schedual {
     constructor(tags, defaultNextSchedualTag, schedualEndEvent) {
         super(generateEmptySetting(tags, defaultNextSchedualTag), schedualEndEvent);
     }
@@ -27,4 +22,3 @@ class EmptySchedual extends Schedual_1.default {
         return "No schedule for today";
     }
 }
-exports.default = EmptySchedual;

@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SLOT_TYPES = void 0;
-const luxon_1 = require("luxon");
+import { Interval } from "luxon";
 const second = 1000;
 const minute = second * 60;
 const hour = minute * 60;
-class TimeSlot {
+export class TimeSlot {
     //Shift is the time in miliseconds after period starts
     constructor(setting, after) {
         this._duration = null;
@@ -26,7 +23,7 @@ class TimeSlot {
     //Starts the period at the moment ran
     startTimeSlot(shift = 0) {
         let trueLength = this._length - shift;
-        this._duration = luxon_1.Interval.after(new Date(), trueLength);
+        this._duration = Interval.after(new Date(), trueLength);
         this.activateTimer(trueLength);
     }
     //Ends the period
@@ -77,8 +74,7 @@ class TimeSlot {
         return this._after;
     }
 }
-exports.default = TimeSlot;
-exports.SLOT_TYPES = {
+export const SLOT_TYPES = {
     NORMAL: "normal",
     PASSING: "passing",
 };

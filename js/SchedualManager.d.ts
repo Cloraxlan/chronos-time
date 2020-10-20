@@ -1,5 +1,5 @@
 import { SchedualSettings } from "./Schedual";
-export default class SchedualManager {
+export declare class SchedualManager {
     private _currentTag;
     private _nextTag;
     private _scheduals;

@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import TimeSlot, { TimeSlotSettings } from "./TimeSlot";
+import { TimeSlotSettings, TimeSlot } from "./TimeSlot";
 import { EventEmitter } from "events";
-export default class Schedual {
+export declare class Schedual {
     private timeSlots;
     private settings;
     private currentSlot;

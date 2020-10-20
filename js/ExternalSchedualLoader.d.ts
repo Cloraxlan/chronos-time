@@ -1,4 +1,4 @@
-export default class ExternalSchedualLoader {
+export declare class ExternalSchedualLoader {
     private _getSchedualURL;
     private _pingSchedualURL;
     private _manager;
