@@ -55,7 +55,12 @@ export class SchedualManager {
   }
   //Go to schedual based on _nextTag
   public goToNextSchedual() {
-    this.goToSchedual(this._nextTag);
+    if (this._nextTag && this._nextTag != "") {
+      console.log(this._nextTag);
+      //this.goToSchedual(this._nextTag);
+    } else {
+      console.log("No next tag provided");
+    }
   }
   //i is the index of current schedual
   private generateOutOfBounds(i: number): TimeSlotSettings {
@@ -75,14 +80,18 @@ export class SchedualManager {
     if (this._currentSchedual) {
       this._currentSchedual.purify();
     }
-    let schedualIndex = this.getSchedualIndexBasedOnTag(tag);
-    this._currentSchedual = this._scheduals[schedualIndex];
-    this._currentSettingIndex = schedualIndex;
-    this._currentTag = tag;
-    this._nextTag = this._settings[schedualIndex].defaultNextSchedualTag;
-    this._currentSchedual.initiateCurrentTimeSlot(
-      this.generateOutOfBounds(schedualIndex)
-    );
+    try {
+      let schedualIndex = this.getSchedualIndexBasedOnTag(tag);
+      this._currentSchedual = this._scheduals[schedualIndex];
+      this._currentSettingIndex = schedualIndex;
+      this._currentTag = tag;
+      this._nextTag = this._settings[schedualIndex].defaultNextSchedualTag;
+      this._currentSchedual.initiateCurrentTimeSlot(
+        this.generateOutOfBounds(schedualIndex)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
   private get currentTimeSlot(): TimeSlot | null {
     if (this._currentSchedual) {
