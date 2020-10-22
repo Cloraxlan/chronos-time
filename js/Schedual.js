@@ -5,6 +5,9 @@ const TimeSlot_1 = require("./TimeSlot");
 const luxon_1 = require("luxon");
 const events_1 = require("events");
 const PassingTimeSlot_1 = require("./PassingTimeSlot");
+let now = () => {
+    return luxon_1.DateTime.local();
+};
 class Schedual {
     //Out of bounds is the timeslot after the schedual is over
     constructor(settings, schedualEndEvent) {
@@ -13,6 +16,7 @@ class Schedual {
         this.currentSlot = null;
         this.outOfBoundsSlot = null;
         this.outOfBoundsSettings = null;
+        this.beforeOutOfBoundsSettings = null;
         this._sSettings = settings;
         this.schedualEndEvent = schedualEndEvent;
         this.settings = settings.timeSlots;
@@ -37,15 +41,21 @@ class Schedual {
     getCurrentTimeSlotIndex() {
         let r = -1;
         this.settings.map((setting, i) => {
-            if ((setting.begin[0] < luxon_1.DateTime.local().hour ||
-                (setting.begin[1] <= luxon_1.DateTime.local().minute &&
-                    setting.begin[0] == luxon_1.DateTime.local().hour)) &&
-                (setting.end[0] > luxon_1.DateTime.local().hour ||
-                    (setting.end[1] > luxon_1.DateTime.local().minute &&
-                        setting.end[0] == luxon_1.DateTime.local().hour))) {
+            if ((setting.begin[0] < now().hour ||
+                (setting.begin[1] <= now().minute &&
+                    setting.begin[0] == now().hour)) &&
+                (setting.end[0] > now().hour ||
+                    (setting.end[1] > now().minute && setting.end[0] == now().hour))) {
                 r = i;
             }
         });
+        if (r == -1) {
+            if (this.settings[0].begin[0] > now().hour ||
+                (this.settings[0].begin[1] > now().minute &&
+                    this.settings[0].begin[0] == now().hour)) {
+                r = -2;
+            }
+        }
         return r;
     }
     //Returns time since the beginning of the i index
@@ -53,6 +63,9 @@ class Schedual {
         let slot;
         if (i == -1) {
             slot = this.outOfBoundsSettings;
+        }
+        else if (i == -2) {
+            slot = this.beforeOutOfBoundsSettings;
         }
         else {
             slot = this.settings[i];
@@ -75,6 +88,14 @@ class Schedual {
         //Out of bound case
         if (timeSlotIndex == -1) {
             this.currentSlot = this.outOfBoundsSlot;
+        }
+        else if (timeSlotIndex == -2) {
+            this.beforeOutOfBoundsSettings = {
+                begin: [0, 0],
+                end: this.settings[0].begin,
+                name: "N/A",
+            };
+            this.currentSlot = new TimeSlot_1.TimeSlot(this.beforeOutOfBoundsSettings, this.schedualEndEvent);
         }
         else {
             this.currentSlot = this.timeSlots[timeSlotIndex];
@@ -102,6 +123,9 @@ class Schedual {
         //Out of bounds case
         if (this.getCurrentTimeSlotIndex() == -1) {
             return nextOutOfBounds;
+        }
+        if (this.getCurrentTimeSlotIndex() == -2) {
+            return this.timeSlots[0].name;
         }
         let nextTimeSlot = this.timeSlots[this.getCurrentTimeSlotIndex() + 1];
         if (nextTimeSlot) {

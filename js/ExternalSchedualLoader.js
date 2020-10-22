@@ -1,17 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExternalSchedualLoader = void 0;
 const SchedualManager_1 = require("./SchedualManager");
-const node_fetch_1 = __importDefault(require("node-fetch"));
+//import fetch from "node-fetch";
+const axios = require('axios');
 class ExternalSchedualLoader {
     constructor(getSchedualURL, pingSchedualURL) {
         this._manager = null;
         this._getSchedualURL = getSchedualURL;
         this._pingSchedualURL = pingSchedualURL;
-        node_fetch_1.default(this._getSchedualURL).then((res) => {
+        axios.get(this._getSchedualURL).then((res) => {
             res.json().then((data) => {
                 this._manager = new SchedualManager_1.SchedualManager(data.scheduals, () => {
                     this.getTodayTommorow().then((todayTommorow) => {
@@ -31,7 +29,7 @@ class ExternalSchedualLoader {
         });
     }
     getTodayTommorow() {
-        return node_fetch_1.default(this._pingSchedualURL).then((res) => {
+        return axios.get(this._pingSchedualURL).then((res) => {
             return res.json().then((data) => {
                 return [data.today, data.tommorow];
             });

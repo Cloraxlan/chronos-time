@@ -9,6 +9,7 @@ export declare class Schedual {
     private outOfBoundsSlot;
     private outOfBoundsSettings;
     private _tags;
+    private beforeOutOfBoundsSettings;
     private schedualEndEvent;
     private _sSettings;
     constructor(settings: SchedualSettings, schedualEndEvent: EventEmitter);
