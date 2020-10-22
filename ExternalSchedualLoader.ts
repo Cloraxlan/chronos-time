@@ -1,5 +1,7 @@
 import { SchedualManager } from "./SchedualManager";
-import fetch from "node-fetch";
+//import fetch from "node-fetch";
+const axios = require('axios');
+
 export class ExternalSchedualLoader {
   private _getSchedualURL: string;
   private _pingSchedualURL: string;
@@ -7,7 +9,7 @@ export class ExternalSchedualLoader {
   constructor(getSchedualURL: string, pingSchedualURL: string) {
     this._getSchedualURL = getSchedualURL;
     this._pingSchedualURL = pingSchedualURL;
-    fetch(this._getSchedualURL).then((res) => {
+    axios.get(this._getSchedualURL).then((res) => {
       res.json().then((data) => {
         this._manager = new SchedualManager(data.scheduals, () => {
           this.getTodayTommorow().then((todayTommorow: [string, string]) => {
@@ -27,7 +29,7 @@ export class ExternalSchedualLoader {
     });
   }
   private getTodayTommorow(): Promise<[string, string]> {
-    return fetch(this._pingSchedualURL).then((res) => {
+    return axios.get(this._pingSchedualURL).then((res) => {
       return res.json().then((data) => {
         return [data.today, data.tommorow];
       });
