@@ -72,7 +72,7 @@ export class Schedual {
     if (i == -1) {
       slot = this.outOfBoundsSettings as TimeSlotSettings;
     } else if (i == -2) {
-      slot = this.beforeOutOfBoundsSettings;
+      slot = this.beforeOutOfBoundsSettings as TimeSlotSettings;
     } else {
       slot = this.settings[i];
     }
