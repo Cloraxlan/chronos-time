@@ -45,7 +45,7 @@ class TimeSlot {
     }
     //Returns the time left to end of Timeslot in hour minute second tuple
     //If it was not started or already ended returns 0
-    timeLeft() {
+    timeLeftCalc() {
         var _a;
         let endingDiff = (_a = this._duration) === null || _a === void 0 ? void 0 : _a.end.diffNow();
         let r = [0, 0, 0];
@@ -63,6 +63,15 @@ class TimeSlot {
             ];*/
         }
         return r;
+    }
+    //Checks that it did not go negative
+    timeLeft() {
+        let timeLeft = this.timeLeftCalc();
+        if (timeLeft[0] < 0 || timeLeft[1] < 0 || timeLeft[2] < 0) {
+            this._after.emit("end");
+            return [0, 0, 0];
+        }
+        return timeLeft;
     }
     get length() {
         return this._length;

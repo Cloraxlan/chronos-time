@@ -11,6 +11,7 @@ export declare class TimeSlot {
     startTimeSlot(shift?: number): void;
     activateTimer(length: number): void;
     endingAt(): DateTime | null;
+    private timeLeftCalc;
     timeLeft(): [number, number, number];
     get length(): number;
     get name(): string;
