@@ -1,5 +1,5 @@
 import { SchedualManager } from "./SchedualManager";
-import refetch from '@hazelee/refetch'
+import refetch from "@hazelee/refetch";
 
 export class ExternalSchedualLoader {
   private _getSchedualURL: string;
@@ -8,7 +8,9 @@ export class ExternalSchedualLoader {
   constructor(getSchedualURL: string, pingSchedualURL: string) {
     this._getSchedualURL = getSchedualURL;
     this._pingSchedualURL = pingSchedualURL;
-    refetch(this._getSchedualURL).json().then((data) => {
+    refetch(this._getSchedualURL)
+      .json()
+      .then((data) => {
         this._manager = new SchedualManager(data.scheduals, () => {
           this.getTodayTommorow().then((todayTommorow: [string, string]) => {
             if (this._manager) {
@@ -23,15 +25,14 @@ export class ExternalSchedualLoader {
             this._manager.setNextTag = todayTommorow[1];
           }
         });
-      
-    });
+      });
   }
   private getTodayTommorow(): Promise<[string, string]> {
-    return refetch(this._pingSchedualURL).json().then((data) => {
-      
+    return refetch(this._pingSchedualURL)
+      .json()
+      .then((data) => {
         return [data.today, data.tommorow];
-      
-    });
+      });
   }
   public get currentTimeLeft(): string | [number, number, number] | undefined {
     if (this._manager) {
@@ -56,5 +57,11 @@ export class ExternalSchedualLoader {
       return this._manager.currentTag;
     }
     return "N/A";
+  }
+  public getMetadata() {
+    return this._manager.schedualMetadata;
+  }
+  public getTimeSlotMetaData() {
+    return this._manager.timeSlotMetadata;
   }
 }

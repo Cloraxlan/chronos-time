@@ -162,4 +162,5 @@ export interface SchedualSettings {
   timeSlots: TimeSlotSettings[];
   outOfBoundsName: string;
   defaultNextSchedualTag: string;
+  metadata?: any;
 }

@@ -10,11 +10,13 @@ export class TimeSlot {
   private _duration: Interval | null = null;
   private _name: string;
   private _after: EventEmitter;
+  private metadata: any;
   //Shift is the time in miliseconds after period starts
   constructor(setting: TimeSlotSettings, after: EventEmitter) {
     this._length = this.getLength(setting.begin, setting.end);
     this._name = setting.name;
     this._after = after;
+    this.metadata = setting.metadata;
   }
   private getLength(begin: [number, number], end: [number, number]) {
     let addDays = 0;
@@ -91,6 +93,9 @@ export class TimeSlot {
   get after(): EventEmitter {
     return this._after;
   }
+  public getMetadata(): any {
+    return this.metadata;
+  }
 }
 //Used to construct TimeSlot
 //Begin and end use military time
@@ -99,6 +104,7 @@ export interface TimeSlotSettings {
   begin: [number, number];
   end: [number, number];
   type?: "normal" | "passing";
+  metadata?: any;
 }
 export const SLOT_TYPES = {
   NORMAL: "normal",

@@ -124,4 +124,10 @@ export class SchedualManager {
   public get nextTag(): string {
     return this._nextTag;
   }
+  public get schedualMetadata() {
+    return this._settings[this._currentSettingIndex].metadata;
+  }
+  public get timeSlotMetadata() {
+    return this.currentTimeSlot.getMetadata();
+  }
 }
