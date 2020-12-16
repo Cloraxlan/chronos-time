@@ -119,5 +119,11 @@ class SchedualManager {
     get nextTag() {
         return this._nextTag;
     }
+    get schedualMetadata() {
+        return this._settings[this._currentSettingIndex].metadata;
+    }
+    get timeSlotMetadata() {
+        return this.currentTimeSlot.getMetadata();
+    }
 }
 exports.SchedualManager = SchedualManager;

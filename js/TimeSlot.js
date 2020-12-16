@@ -12,6 +12,7 @@ class TimeSlot {
         this._length = this.getLength(setting.begin, setting.end);
         this._name = setting.name;
         this._after = after;
+        this.metadata = setting.metadata;
     }
     getLength(begin, end) {
         let addDays = 0;
@@ -84,6 +85,9 @@ class TimeSlot {
     }
     get after() {
         return this._after;
+    }
+    getMetadata() {
+        return this.metadata;
     }
 }
 exports.TimeSlot = TimeSlot;

@@ -8,4 +8,6 @@ export declare class ExternalSchedualLoader {
     get currentName(): string | undefined;
     get nextName(): string | undefined;
     get currentTag(): string;
+    getMetadata(): any;
+    getTimeSlotMetaData(): any;
 }

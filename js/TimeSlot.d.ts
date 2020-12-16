@@ -6,6 +6,7 @@ export declare class TimeSlot {
     private _duration;
     private _name;
     private _after;
+    private metadata;
     constructor(setting: TimeSlotSettings, after: EventEmitter);
     private getLength;
     startTimeSlot(shift?: number): void;
@@ -17,12 +18,14 @@ export declare class TimeSlot {
     get name(): string;
     set name(name: string);
     get after(): EventEmitter;
+    getMetadata(): any;
 }
 export interface TimeSlotSettings {
     name: string;
     begin: [number, number];
     end: [number, number];
     type?: "normal" | "passing";
+    metadata?: any;
 }
 export declare const SLOT_TYPES: {
     NORMAL: string;

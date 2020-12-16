@@ -19,4 +19,6 @@ export declare class SchedualManager {
     get nextName(): string | undefined;
     get currentTimeLeft(): string | [number, number, number] | undefined;
     get nextTag(): string;
+    get schedualMetadata(): any;
+    get timeSlotMetadata(): any;
 }

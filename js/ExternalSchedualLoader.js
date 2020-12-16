@@ -11,7 +11,9 @@ class ExternalSchedualLoader {
         this._manager = null;
         this._getSchedualURL = getSchedualURL;
         this._pingSchedualURL = pingSchedualURL;
-        refetch_1.default(this._getSchedualURL).json().then((data) => {
+        refetch_1.default(this._getSchedualURL)
+            .json()
+            .then((data) => {
             this._manager = new SchedualManager_1.SchedualManager(data.scheduals, () => {
                 this.getTodayTommorow().then((todayTommorow) => {
                     if (this._manager) {
@@ -29,7 +31,9 @@ class ExternalSchedualLoader {
         });
     }
     getTodayTommorow() {
-        return refetch_1.default(this._pingSchedualURL).json().then((data) => {
+        return refetch_1.default(this._pingSchedualURL)
+            .json()
+            .then((data) => {
             return [data.today, data.tommorow];
         });
     }
@@ -56,6 +60,12 @@ class ExternalSchedualLoader {
             return this._manager.currentTag;
         }
         return "N/A";
+    }
+    getMetadata() {
+        return this._manager.schedualMetadata;
+    }
+    getTimeSlotMetaData() {
+        return this._manager.timeSlotMetadata;
     }
 }
 exports.ExternalSchedualLoader = ExternalSchedualLoader;
