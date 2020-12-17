@@ -126,6 +126,9 @@ export class Schedual {
   public get sSettings(): SchedualSettings {
     return this._sSettings;
   }
+  public getCurrentIndex(): number {
+    return this.getCurrentTimeSlotIndex();
+  }
   public nextName(nextOutOfBounds: string): string {
     //Out of bounds case
     if (this.getCurrentTimeSlotIndex() == -1) {

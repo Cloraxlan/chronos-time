@@ -5,5 +5,5 @@ let s = new ExternalSchedualLoader(
   "https://chronoshhs.herokuapp.com/HHSTodayIs"
 );
 setInterval(() => {
-  console.log(s.currentName, s.getMetadata(), s.getTimeSlotMetaData());
+  console.log(s.currentName, s.getSchedualStatus());
 }, 1000);

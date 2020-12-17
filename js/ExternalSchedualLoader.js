@@ -67,5 +67,8 @@ class ExternalSchedualLoader {
     getTimeSlotMetaData() {
         return this._manager.timeSlotMetadata;
     }
+    getSchedualStatus() {
+        return this._manager.getSchedualStatus();
+    }
 }
 exports.ExternalSchedualLoader = ExternalSchedualLoader;

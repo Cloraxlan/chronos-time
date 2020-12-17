@@ -1,5 +1,6 @@
 import { SchedualManager } from "./SchedualManager";
 import refetch from "@hazelee/refetch";
+import { SchedualSettings } from ".";
 
 export class ExternalSchedualLoader {
   private _getSchedualURL: string;
@@ -63,5 +64,8 @@ export class ExternalSchedualLoader {
   }
   public getTimeSlotMetaData() {
     return this._manager.timeSlotMetadata;
+  }
+  public getSchedualStatus(): [SchedualSettings, number] {
+    return this._manager.getSchedualStatus();
   }
 }

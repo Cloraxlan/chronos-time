@@ -119,6 +119,9 @@ class Schedual {
     get sSettings() {
         return this._sSettings;
     }
+    getCurrentIndex() {
+        return this.getCurrentTimeSlotIndex();
+    }
     nextName(nextOutOfBounds) {
         //Out of bounds case
         if (this.getCurrentTimeSlotIndex() == -1) {

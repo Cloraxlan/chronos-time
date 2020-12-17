@@ -130,4 +130,11 @@ export class SchedualManager {
   public get timeSlotMetadata() {
     return this.currentTimeSlot.getMetadata();
   }
+  //Gets a whole bunch of data for frontend
+  public getSchedualStatus(): [SchedualSettings, number] {
+    return [
+      this._settings[this._currentSettingIndex],
+      this._currentSchedual.getCurrentIndex(),
+    ];
+  }
 }
