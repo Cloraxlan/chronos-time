@@ -22,6 +22,7 @@ export declare class Schedual {
     get currentTimeSlot(): TimeSlot | null;
     get tags(): String[];
     get sSettings(): SchedualSettings;
+    getCurrentIndex(): number;
     nextName(nextOutOfBounds: string): string;
     purify(): void;
     set outOfBounds(outOfBoundsSettings: TimeSlotSettings);

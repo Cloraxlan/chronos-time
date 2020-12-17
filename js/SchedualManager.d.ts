@@ -21,4 +21,5 @@ export declare class SchedualManager {
     get nextTag(): string;
     get schedualMetadata(): any;
     get timeSlotMetadata(): any;
+    getSchedualStatus(): [SchedualSettings, number];
 }

@@ -1,3 +1,4 @@
+import { SchedualSettings } from ".";
 export declare class ExternalSchedualLoader {
     private _getSchedualURL;
     private _pingSchedualURL;
@@ -10,4 +11,5 @@ export declare class ExternalSchedualLoader {
     get currentTag(): string;
     getMetadata(): any;
     getTimeSlotMetaData(): any;
+    getSchedualStatus(): [SchedualSettings, number];
 }
