@@ -3,7 +3,8 @@ export declare class ExternalSchedualLoader {
     private _getSchedualURL;
     private _pingSchedualURL;
     private _manager;
-    constructor(getSchedualURL: string, pingSchedualURL: string);
+    private testing;
+    constructor(getSchedualURL: any, pingSchedualURL: any, testing?: boolean);
     private getTodayTommorow;
     get currentTimeLeft(): string | [number, number, number] | undefined;
     get currentName(): string | undefined;

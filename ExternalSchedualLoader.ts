@@ -3,16 +3,30 @@ import refetch from "@hazelee/refetch";
 import { SchedualSettings } from ".";
 
 export class ExternalSchedualLoader {
-  private _getSchedualURL: string;
-  private _pingSchedualURL: string;
+  private _getSchedualURL: any;
+  private _pingSchedualURL: any;
   private _manager: SchedualManager | null = null;
-  constructor(getSchedualURL: string, pingSchedualURL: string) {
+  private testing: boolean;
+  constructor(
+    getSchedualURL: any,
+    pingSchedualURL: any,
+    testing: boolean = false
+  ) {
+    this.testing = testing;
     this._getSchedualURL = getSchedualURL;
     this._pingSchedualURL = pingSchedualURL;
-    refetch(this._getSchedualURL)
-      .json()
-      .then((data) => {
-        this._manager = new SchedualManager(data.scheduals, () => {
+    if (!testing) {
+      refetch(this._getSchedualURL)
+        .json()
+        .then((data) => {
+          this._manager = new SchedualManager(data.scheduals, () => {
+            this.getTodayTommorow().then((todayTommorow: [string, string]) => {
+              if (this._manager) {
+                this._manager.goToSchedual(todayTommorow[0]);
+                this._manager.setNextTag = todayTommorow[1];
+              }
+            });
+          });
           this.getTodayTommorow().then((todayTommorow: [string, string]) => {
             if (this._manager) {
               this._manager.goToSchedual(todayTommorow[0]);
@@ -20,6 +34,8 @@ export class ExternalSchedualLoader {
             }
           });
         });
+    } else {
+      this._manager = new SchedualManager(getSchedualURL, () => {
         this.getTodayTommorow().then((todayTommorow: [string, string]) => {
           if (this._manager) {
             this._manager.goToSchedual(todayTommorow[0]);
@@ -27,13 +43,31 @@ export class ExternalSchedualLoader {
           }
         });
       });
+      this.getTodayTommorow().then((todayTommorow: [string, string]) => {
+        console.log("1!!" + todayTommorow);
+        if (this._manager) {
+          this._manager.goToSchedual(todayTommorow[0]);
+          this._manager.setNextTag = todayTommorow[1];
+        }
+      });
+      console.log(this.getTodayTommorow());
+    }
   }
   private getTodayTommorow(): Promise<[string, string]> {
-    return refetch(this._pingSchedualURL)
-      .json()
-      .then((data) => {
-        return [data.today, data.tommorow];
+    if (!this.testing) {
+      return refetch(this._pingSchedualURL)
+        .json()
+        .then((data) => {
+          return [data.today, data.tommorow];
+        });
+    } else {
+      return new Promise((resolve) => {
+        resolve([
+          this._pingSchedualURL.today as string,
+          this._pingSchedualURL.tommorow as string,
+        ]);
       });
+    }
   }
   public get currentTimeLeft(): string | [number, number, number] | undefined {
     if (this._manager) {

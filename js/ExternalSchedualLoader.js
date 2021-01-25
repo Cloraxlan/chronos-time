@@ -7,14 +7,33 @@ exports.ExternalSchedualLoader = void 0;
 const SchedualManager_1 = require("./SchedualManager");
 const refetch_1 = __importDefault(require("@hazelee/refetch"));
 class ExternalSchedualLoader {
-    constructor(getSchedualURL, pingSchedualURL) {
+    constructor(getSchedualURL, pingSchedualURL, testing = false) {
         this._manager = null;
+        this.testing = testing;
         this._getSchedualURL = getSchedualURL;
         this._pingSchedualURL = pingSchedualURL;
-        refetch_1.default(this._getSchedualURL)
-            .json()
-            .then((data) => {
-            this._manager = new SchedualManager_1.SchedualManager(data.scheduals, () => {
+        if (!testing) {
+            refetch_1.default(this._getSchedualURL)
+                .json()
+                .then((data) => {
+                this._manager = new SchedualManager_1.SchedualManager(data.scheduals, () => {
+                    this.getTodayTommorow().then((todayTommorow) => {
+                        if (this._manager) {
+                            this._manager.goToSchedual(todayTommorow[0]);
+                            this._manager.setNextTag = todayTommorow[1];
+                        }
+                    });
+                });
+                this.getTodayTommorow().then((todayTommorow) => {
+                    if (this._manager) {
+                        this._manager.goToSchedual(todayTommorow[0]);
+                        this._manager.setNextTag = todayTommorow[1];
+                    }
+                });
+            });
+        }
+        else {
+            this._manager = new SchedualManager_1.SchedualManager(getSchedualURL, () => {
                 this.getTodayTommorow().then((todayTommorow) => {
                     if (this._manager) {
                         this._manager.goToSchedual(todayTommorow[0]);
@@ -23,19 +42,31 @@ class ExternalSchedualLoader {
                 });
             });
             this.getTodayTommorow().then((todayTommorow) => {
+                console.log("1!!" + todayTommorow);
                 if (this._manager) {
                     this._manager.goToSchedual(todayTommorow[0]);
                     this._manager.setNextTag = todayTommorow[1];
                 }
             });
-        });
+            console.log(this.getTodayTommorow());
+        }
     }
     getTodayTommorow() {
-        return refetch_1.default(this._pingSchedualURL)
-            .json()
-            .then((data) => {
-            return [data.today, data.tommorow];
-        });
+        if (!this.testing) {
+            return refetch_1.default(this._pingSchedualURL)
+                .json()
+                .then((data) => {
+                return [data.today, data.tommorow];
+            });
+        }
+        else {
+            return new Promise((resolve) => {
+                resolve([
+                    this._pingSchedualURL.today,
+                    this._pingSchedualURL.tommorow,
+                ]);
+            });
+        }
     }
     get currentTimeLeft() {
         if (this._manager) {
