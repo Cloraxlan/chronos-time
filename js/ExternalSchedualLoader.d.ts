@@ -1,10 +1,13 @@
+import { SchedualManager } from "./SchedualManager";
 import { SchedualSettings } from ".";
-export declare class ExternalSchedualLoader {
+export declare class ExternalSchedualLoader extends SchedualManager {
     private _getSchedualURL;
     private _pingSchedualURL;
     private _manager;
     private testing;
-    constructor(getSchedualURL: any, pingSchedualURL: any, testing?: boolean);
+    constructor(getSchedualURL: string, pingSchedualURL: string);
+    private asyncSetup;
+    private readData;
     private getTodayTommorow;
     get currentTimeLeft(): string | [number, number, number] | undefined;
     get currentName(): string | undefined;

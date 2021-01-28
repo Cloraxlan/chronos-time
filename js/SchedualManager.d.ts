@@ -8,6 +8,7 @@ export declare class SchedualManager {
     private _settings;
     private _currentSettingIndex;
     constructor(scheduals: SchedualSettings[], onSchedualEnd: () => void);
+    asyncConstruct(scheduals: SchedualSettings[], onSchedualEnd: () => void): void;
     private getSchedualIndexBasedOnTag;
     set setNextTag(tag: string);
     goToNextSchedual(): void;

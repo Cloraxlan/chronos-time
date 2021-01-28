@@ -1,29 +1,56 @@
 import { SchedualManager } from "./SchedualManager";
 import refetch from "@hazelee/refetch";
 import { SchedualSettings } from ".";
+import { settings } from "cluster";
 
-export class ExternalSchedualLoader {
+export class ExternalSchedualLoader extends SchedualManager{
   private _getSchedualURL: any;
   private _pingSchedualURL: any;
-  private _manager: SchedualManager | null = null;
-  private testing: boolean;
+  private _manager: boolean
+  private testing: boolean = false;
   constructor(
-    getSchedualURL: any,
-    pingSchedualURL: any,
-    testing: boolean = false
+    getSchedualURL: string,
+    pingSchedualURL: string,
   ) {
-    this.testing = testing;
+    super([],()=>{})
     this._getSchedualURL = getSchedualURL;
     this._pingSchedualURL = pingSchedualURL;
-    if (!testing) {
-      refetch(this._getSchedualURL)
+    this.asyncSetup(getSchedualURL, pingSchedualURL); 
+      
+  }
+  private async asyncSetup(getSchedualURL, pingSchedualURL){
+    let sSettings: SchedualSettings[] = await this.readData(getSchedualURL);
+    super.asyncConstruct(sSettings, () => {
+      this.getTodayTommorow().then((todayTommorow: [string, string]) => {
+          if(this._manager){
+            super.goToSchedual(todayTommorow[0]);
+          super.setNextTag = todayTommorow[1];
+          }
+          
+          
+        
+      })})
+      console.log(super.currentName)
+
+      this.getTodayTommorow().then((todayTommorow: [string, string]) => {
+        super.goToSchedual(todayTommorow[0]);
+          super.setNextTag = todayTommorow[1];
+          this._manager = true;
+
+      })
+
+  }
+  private async readData(getSchedualURL : string): Promise<SchedualSettings[]>{
+    return await refetch(getSchedualURL)
         .json()
         .then((data) => {
-          this._manager = new SchedualManager(data.scheduals, () => {
+          return data.scheduals;
+          /*this._manager = new SchedualManager(data.scheduals, () => {
             this.getTodayTommorow().then((todayTommorow: [string, string]) => {
               if (this._manager) {
                 this._manager.goToSchedual(todayTommorow[0]);
                 this._manager.setNextTag = todayTommorow[1];
+                
               }
             });
           });
@@ -32,74 +59,49 @@ export class ExternalSchedualLoader {
               this._manager.goToSchedual(todayTommorow[0]);
               this._manager.setNextTag = todayTommorow[1];
             }
-          });
+          });*/
         });
-    } else {
-      this._manager = new SchedualManager(getSchedualURL, () => {
-        this.getTodayTommorow().then((todayTommorow: [string, string]) => {
-          if (this._manager) {
-            this._manager.goToSchedual(todayTommorow[0]);
-            this._manager.setNextTag = todayTommorow[1];
-          }
-        });
-      });
-      this.getTodayTommorow().then((todayTommorow: [string, string]) => {
-        console.log("1!!" + todayTommorow);
-        if (this._manager) {
-          this._manager.goToSchedual(todayTommorow[0]);
-          this._manager.setNextTag = todayTommorow[1];
-        }
-      });
-      console.log(this.getTodayTommorow());
-    }
   }
   private getTodayTommorow(): Promise<[string, string]> {
-    if (!this.testing) {
+    
       return refetch(this._pingSchedualURL)
         .json()
         .then((data) => {
           return [data.today, data.tommorow];
         });
-    } else {
-      return new Promise((resolve) => {
-        resolve([
-          this._pingSchedualURL.today as string,
-          this._pingSchedualURL.tommorow as string,
-        ]);
-      });
-    }
+    
   }
   public get currentTimeLeft(): string | [number, number, number] | undefined {
     if (this._manager) {
-      return this._manager.currentTimeLeft;
+      return super.currentTimeLeft;
     }
     return "N/A";
   }
   public get currentName(): string | undefined {
     if (this._manager) {
-      return this._manager.currentName;
+      return super.currentName;
     }
     return "N/A";
   }
   public get nextName(): string | undefined {
     if (this._manager) {
-      return this._manager.nextName;
+      return super.nextName;
     }
     return "N/A";
   }
   public get currentTag(): string {
     if (this._manager) {
-      return this._manager.currentTag;
+      return super.currentTag;
     }
     return "N/A";
   }
   public getMetadata() {
-    return this._manager.schedualMetadata;
+    return super.schedualMetadata;
   }
   public getTimeSlotMetaData() {
-    return this._manager.timeSlotMetadata;
+    return super.timeSlotMetadata;
   }
   public getSchedualStatus(): [SchedualSettings, number] {
-    return this._manager.getSchedualStatus();
+    return super.getSchedualStatus();
   }
 }

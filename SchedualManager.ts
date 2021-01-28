@@ -12,6 +12,27 @@ export class SchedualManager {
   private _settings: SchedualSettings[];
   private _currentSettingIndex: number = 0;
   constructor(scheduals: SchedualSettings[], onSchedualEnd: () => void) {
+    if(scheduals.length >0 ){this._settings = scheduals;
+    this.nextSchedual = new EventEmitter();
+    this.nextSchedual.on("end", () => {
+      this.goToNextSchedual();
+      onSchedualEnd();
+    });
+    scheduals.map((schedual, i) => {
+      if (schedual.timeSlots.length == 0) {
+        let empty = new EmptySchedual(
+          schedual.tags,
+          schedual.defaultNextSchedualTag,
+          this.nextSchedual
+        );
+        this._scheduals.push(empty);
+        scheduals[i] = empty.sSettings;
+      } else {
+        this._scheduals.push(new Schedual(schedual, this.nextSchedual));
+      }
+    });}
+  }
+  asyncConstruct(scheduals: SchedualSettings[], onSchedualEnd: () => void){
     this._settings = scheduals;
     this.nextSchedual = new EventEmitter();
     this.nextSchedual.on("end", () => {
